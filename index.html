@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/themes/prism-okaidia.min.css" integrity="sha512-mIs9kKbaw6JZFfSuo+MovjU+Ntggfoj8RwAmJbVXQ5mkAX5LlgETQEweFPI18humSPHymTb5iikEOKWF7I8ncQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root {
+      --primary-color: hsl(270, 54%, 15%);
+      --text: #eee;
+      --button-bg: rebeccapurple;
+      --button-border: hsl(270, 54%, 50%);
+    }
+
+    body {
+      max-width: 800px;
+      margin: auto;
+      background-color: var(--primary-color);
+      color: var(--text);
+      font-size: 1.2rem;
+      line-height: 1.5;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    h1,
+    h2,
+    h3 {
+      text-align: center;
+      margin: 48px 0;
+      letter-spacing: 1.5px;
+    }
+
+    p {
+      margin: 48px 0;
+    }
+
+    button {
+      padding: 10px 24px;
+      background-color: rebeccapurple;
+      border: solid 2px var(--button-border);
+      border-radius: 4px;
+      color: var(--text);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 200ms;
+    }
+
+    button:hover {
+      background-color: var(--button-border);
+    }
+
+    span.mono {
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    a {
+      color: hsl(15, 72%, 75%);
+    }
+
+    a:visited {
+      color: hsl(15, 72%, 70%);
+    }
+
+    ul>li,
+    ol>li {
+      line-height: 2;
+    }
+
+    #weather,
+    #weather-app,
+    .weather-app-example div,
+    .weather-app-example section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    #weather-app p,
+    #weather-app h2,
+    .weather-app-example h2,
+    .weather-app-example p {
+      margin: 0;
+    }
+
+    #weather-app a,
+    .weather-app-example a {
+      font-size: 0.8rem;
+    }
+
+    #weather-app form,
+    .weather-app-example form {
+      position: relative;
+      display: flex;
+      flex-grow: 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    #weather-app label,
+    .weather-app-example label {
+      pointer-events: none;
+      font-size: 1rem;
+      font-family: sans-serif;
+      position: absolute;
+      top: 10px;
+      width: 100px;
+      left: 20%;
+      color: black;
+      transition: 100ms ease-out;
+    }
+
+    #weather-app input,
+    .weather-app-example input {
+      font-size: 1rem;
+      padding: 10px;
+    }
+
+    #weather-app input:focus~label,
+    #weather-app input:not(:placeholder-shown)~label,
+    .weather-app-example input:focus~label,
+    .weather-app-example input:not(:placeholder-shown)~label {
+      top: -24px;
+      color: var(--text-light);
+    }
+
+    .weather-app-example {
+      border: 2px solid #eee;
+      position: relative;
+      border-radius: 0 6px 6px 6px;
+      padding: 24px 0;
+      margin: 96px 0;
+    }
+
+    .weather-app-example>.tag {
+      position: absolute;
+      left: -2px;
+      top: -30px;
+      color: hsl(270, 54%, 15%);
+      background-color: #eee;
+      padding: 0 24px;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Weather App</h1>
+
+  <div id="weather-app">
+    <section id="weather"></section>
+    <form>
+      <input name="search" id="weather-search" type="text" placeholder=" " />
+      <label for="weather-search">
+        Enter location
+      </label>
+      <button type="submit">Search</button>
+    </form>
+  </div>
+
+  <h2>Instructions</h2>
+  <p>For this assignment, you'll be creating a weather application that allows users to search for current weather data by location.</p>
+  <p>Before you begin this assignment, you will need to create a free <a href="https://openweathermap.org/">Open Weather API</a> account.</p>
+  <p>After creating an account, visit <a href="https://home.openweathermap.org/api_keys">the API key management page</a> to obtain a key to use for this assignment.</p>
+
+  <h3>Setup</h3>
+  <p>The markup for the weather app is as follows:</p>
+  <pre><code class="language-markup">&lt;div id="weather-app">
+  &lt;section id="weather">&lt;/section>
+  &lt;form>
+    &lt;input name="search"
+      id="weather-search"
+      type="text"
+      placeholder=" "/>
+    &lt;label for="weather-search">
+      Enter location
+    &lt;/label>
+    &lt;button type="submit">Search&lt;/button>
+  &lt;/form>
+&lt;/div></code></pre>
+  <p><u>Do NOT modify this <span class="mono">index.html</span> file.</u> The included automated tests depend on this markup to run. All markup needed to complete this assignment is already included. There is also no need to write any CSS to complete this assignment; all required CSS for the assignment is already included.</p>
+  <p>There is no provided JavaScript for this assignment. Please write all of your code in the provided empty <span class="mono">index.js</span> file.</p>
+  <h3 id="app-behavior">Application Behavior</h3>
+  <p>When the app loads, only the input field and search button should be visible (<a href="#fig-1">figure 1</a>).</p>
+
+  <div class="weather-app-example">
+    <span class="tag" id="fig-1">Figure 1</span>
+    <div>
+      <section></section>
+      <form>
+        <input name="search" type="text" placeholder=" " />
+        <label>
+          Enter location
+        </label>
+        <button type="button">Search</button>
+      </form>
+    </div>
+  </div>
+
+  <p>After submitting the form, the app should make a call to the <a href="https://openweathermap.org/current">Open Weather API's current weather endpoint</a> using the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch">JavaScript fetch API</a> to obtain current weather data based on the location entered by the user.</p>
+
+  <p id="required-data">
+    After retrieving the weather data, the app should then display the current weather information on the page (<a href="#fig-2">figure 2</a>). <u>To receive full credit, the following data MUST be displayed</u>:
+    <ol>
+      <li><a href="#example-loc">The city and country code</a></li>
+      <li><a href="#example-link">A Google Maps link to the location</a></li>
+      <li><a href="#example-icon">A weather icon representing the current weather condition</a></li>
+      <li><a href="#example-desc">A description of the current weather condition</a></li>
+      <li><a href="#example-actual-temp">The actual temperature</a></li>
+      <li><a href="#example-feels-temp">The perceived temperature</a></li>
+      <li><a href="#example-time">The time the weather information was last updated.</a></li>
+    </ol>
+  </p>
+
+  <div class="weather-app-example">
+    <span class="tag" id="fig-2">Figure 2</span>
+    <div>
+      <section>
+        <h2 id="example-loc">Gainesville, US</h2>
+        <a id="example-link" href="https://www.google.com/maps/search/?api=1&amp;query=29.6516,-82.3248"
+          target="__BLANK">Click to view map</a>
+        <img id="example-icon" src="https://openweathermap.org/img/wn/01n@2x.png">
+        <p id="example-desc" style="text-transform: capitalize;">clear sky</p><br>
+        <p id="example-actual-temp">Current: 53.74° F</p>
+        <p id="example-feels-temp">Feels like: 51.69° F</p><br>
+        <p id="example-time">Last updated: 11:00 PM</p>
+      </section>
+      <form>
+        <input name="search" type="text" placeholder=" " />
+        <label>
+          Enter location
+        </label>
+        <button type="button">Search</button>
+      </form>
+    </div>
+  </div>
+  <pre><code class="language-markup">
+    &lt;div id="weather-app">
+      &lt;section id="weather">
+        &lt;h2>Gainesville, US&lt;/h2>
+        &lt;a href="https://www.google.com/maps/search/?api=1&amp;query=29.6516,-82.3248"
+        target="__BLANK">Click to view map&lt;/a>
+        &lt;img src="https://openweathermap.org/img/wn/01n@2x.png">
+        &lt;p style="text-transform: capitalize;">clear sky&lt;/p>&lt;br>
+        &lt;p>Current: 53.74° F&lt;/p>
+        &lt;p>Feels like: 51.69° F&lt;/p>&lt;br>
+        &lt;p>Last updated: 11:00 PM&lt;/p>
+      &lt;/section>
+      &lt;form>
+        &lt;input name="search" type="text" placeholder=" " />
+        &lt;label for="weather-search">
+          Enter location
+        &lt;/label>
+        &lt;button type="submit">Search&lt;/button>
+      &lt;/form>
+    &lt;/div>
+  </code></pre>
+
+  <p>If the user enters a search term that does not retrieve weather data, the app should notify the user that the location they entered was not found (<a href="#fig-3">figure 3</a>).</p>
+
+  <div class="weather-app-example">
+    <span class="tag" id="fig-3">Figure 3</span>
+    <div>
+      <section>
+        <h2>Location not found</h2>
+      </section>
+      <form>
+        <input name="search" type="text" placeholder=" " />
+        <label>
+          Enter location
+        </label>
+        <button type="button">Search</button>
+      </form>
+    </div>
+  </div>
+  <pre><code class="language-markup">
+    &lt;div id="weather-app">
+      &lt;section id="weather">
+        &lt;h2>Location not found&lt;/h2>
+      &lt;/section>
+      &lt;form>
+        &lt;input name="search" type="text" placeholder=" " />
+        &lt;label for="weather-search">
+          Enter location
+        &lt;/label>
+        &lt;button type="submit">Search&lt;/button>
+      &lt;/form>
+    &lt;/div>
+  </code></pre>
+
+  <p>Additional searches do not cause additional weather data to be added to the <span class="mono">#weather</span> element. Each subsequent query should produce results demonstrated in either <a href="#fig-2">figure 2</a> or <a href="#fig-3">figure 3</a>. Also note that the input field's value is reset with each form submission. Both of these can be achieved by setting the <span class="mono">value</span> property of the input field and the <span class="mono">innerHTML</span> property of the <span class="mono">#weather</span> element to empty strings with each search.</p>
+
+  <h3>Constructing the Open Weather URL</h3>
+  <p>To obtain the weather data from the API, it will be necessary to construct the URL for the request using JavaScript. Here is the URL for Open Weather's <a href="https://openweathermap.org/current#name">current weather endpoint</a> from their documentation (Note that the curly braces are not part of the URL, but intended to denote the places to replace portions of the URL with our own data):</p>
+  <pre><code class="language-markup">https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}</code></pre>
+  <p>We will need to add an extra <a href="https://openweathermap.org/current#data">parameter</a> (<span class="mono">units=imperial</span>) to the <a href="https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_is_a_URL#parameters">query string</a> to ensure we receive temperature data in fahrenheit instead of kelvins.</p>
+  <p>Here is an example of a completed URL:</p>
+  <pre><code class="language-markup">https://api.openweathermap.org/data/2.5/weather?q=gainesville&units=imperial&appid=yourapikeyhere</code></pre>
+  <p>The above URL is hardcoded to always retrieve data for Gainesville, but our app needs to query for a user-entered location. To fix this, we will need to use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Addition#string_concatenation">string concatenation</a> in JavaScript to construct a new URL with each request. Assuming our user's query is stored in a variable named <span class="mono">userQuery</span>, our code might look something like this:</p>
+  <pre><code class="language-js">var weatherURL = "https://api.openweathermap.org/data/2.5/weather"
+var queryString = "?units=imperial&appid=yourapikeyhere&q=" + userQuery
+var fetchURL = weatherUrl + queryString</code></pre>
+
+  <h3>Constructing elements from the Weather API response</h3>
+  <p>Most of the required data for this assignment can be pulled directly from the Open Weather API's response JSON. However, some elements are not obvious and require some additional insight.</p>
+
+  <p>First, the <a href="">current weather endpoint</a> does not return a full URL for the weather icon. Here's a portion of the response:</p>
+<pre><code class="language-json">{
+  "coord": {
+    "lat": 29.6516,
+    "lon": -82.3248
+  },
+  "weather": [
+    {
+      "id": 800,
+      "main": "Clear",
+      "description": "clear sky",
+      "icon": "01d"
+    }
+  ],
+  "dt": 1560350645,
+  ...
+}</code></pre>
+
+  <p>The API only returns icon codes instead of full URLs. To construct the icon URL from the condition code, use the following URL from the Open Weather <a href="https://openweathermap.org/weather-conditions">documentation:</a></p>
+
+  <pre><code class="language-markup">https://openweathermap.org/img/wn/&lt;icon-code-here>@2x.png</code></pre>
+
+  <p>For the last updated time, use the <span class="mono">dt</span> property from the weather API response:</p>
+  <pre><code class="language-json">{
+  "coord": {...},
+  "weather": [...],
+  "dt": 1560350645,
+  ...
+}</code></pre>
+
+  <p>The time given in the response is a UNIX timestamp measured in seconds, however <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#the_ecmascript_epoch_and_timestamps">JavaScript timestamps</a> are measured in milliseconds, so this number must first be multiplied by 1000. After converting to milliseconds, pass the value into JavaScript's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleTimeString#using_tolocaletimestring">Date constructor</a> and then call <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleTimeString#using_tolocaletimestring">toLocaleTimeString()</a> on the resulting Date object.</p>
+
+  <pre><code class="language-js">var date = new Date(/* milliseconds go here */)
+var timeString = date.toLocaleTimeString('en-US', {
+  hour: 'numeric',
+  minute: '2-digit'
+})</code></pre>
+
+  <p>Lastly, to create the google maps link (seen in <a href="#fig-2">figure 2</a>), use the <span class="mono">coord</span> property from the API response:</p>
+  <pre><code class="language-json">{
+  "coord": {
+    "lat": 29.6516,
+    "lon": -82.3248
+  },
+  ...
+}</code></pre>
+  <p>Then use those coordinates in the <span class="mono">query</span> parameter of the Google Maps URL also seen in <a href="#fig-2">figure 2:</a></p>
+  <pre><code class="language-markup">https://www.google.com/maps/search/?api=1&amp;query=29.6516,-82.3248</code></pre>
+
+<h2>Tests</h2>
+  <p>Automated tests are included with this assignment. Click the "run tests" button in the bottom right of the screen to run the test suite. To close the tests, click "close tests". To receive full credit, all automated tests must pass.</p>
+
+  <h2>Requirements for full credit</h2>
+  <p>
+    To receive full credit for this assignment, your program MUST:
+  <ul>
+    <li>Operate in the same manner as described above in the <a href="#app-behavior">application behavior</a> section.</li>
+    <li>Display all of the <a href="#required-data">required weather data</a> as listed above.</li>
+    <li>Pass all automated tests.</li>
+    <li>Be deployed to GitHub Pages.</li>
+  </ul>
+  </p>
+  <h2>Submission</h2>
+  <p>
+    When submitting this assignment, please include <u>BOTH</u>:
+  <ol>
+    <li>A link to the assignment's GitHub repository.</li>
+    <li>A link to the assignment's deployed, live site on GitHub Pages.</li>
+  </ol>
+  </p>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/prism.min.js"
+    integrity="sha512-/Swpp6aCQ0smuZ+zpklJqMClcUlvxhpLf9aAcM7JjJrj2waCU4dikm3biOtMVAflOOeniW9qzaNXNrbOAOWFCw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="index.js"></script>
+  <script src="tests.js"></script>
+</body>
+
+</html>
