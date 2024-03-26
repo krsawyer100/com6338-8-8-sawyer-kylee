@@ -64,12 +64,12 @@ function renderWeather (data) {
 
     //display actual temperature (p)
     var actualTemp = document.createElement('p')
-    actualTemp.textContent = "Current: " + data.main.temp + " \u00B0F"
+    actualTemp.textContent = "Current: " + data.main.temp + "\u00B0 F"
     weatherSection.appendChild(actualTemp)
 
     //display perceived temperature (p)
     var perceivedTemp = document.createElement('p')
-    perceivedTemp.textContent = "Feels like: " + data.main.feels_like + " \u00B0F"
+    perceivedTemp.textContent = "Feels like: " + data.main.feels_like + "\u00B0 F"
     weatherSection.appendChild(perceivedTemp)
     weatherSection.appendChild(document.createElement('br'))
 
